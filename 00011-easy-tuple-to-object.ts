@@ -19,17 +19,13 @@ type error = TupleToObject<[[1, 2], {}]>;
 /**
  * const tuple = ['tesla', 'model 3', 'model X', 'model Y'] as const
  * 转为元组字面量类型
- */
-
-/**
- * <T extends readonly any[]>
- * 因为转换后的字面量类型是只读的，所以需要加上 readonly
- */
-
-/**
+ *
+ * <T extends readonly (string | number)[]>
+ * 因为转换后的字面量类型是只读的，所以需要加上 readonly，同时限制类型
+ *
  * [K in T[number]]
  * 遍历元组字面量的特定语法
  */
-type TupleToObject<T extends readonly any[]> = {
+type TupleToObject<T extends readonly (string | number)[]> = {
   [K in T[number]]: K;
 };
