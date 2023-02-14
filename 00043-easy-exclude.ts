@@ -8,21 +8,17 @@ type cases = [Expect<Equal<MyExclude<'a' | 'b' | 'c', 'a'>, 'b' | 'c'>>, Expect<
  * 泛型遇到联合类型和 extends 的时候，会拆解开一一进行判断，如下：
  *
  * MyExclude<'a' | 'b' | 'c', 'a'>
- *  MyExclude<'a', 'a'> => 'a' extends 'a' ? never : 'a' => never
- *  MyExclude<'b', 'a'> => 'b' extends 'a' ? never : 'b' => 'b'
- *  MyExclude<'c', 'a'> => 'c' extends 'a' ? never : 'c' => 'c'
+ *  'a' extends 'a' ? never : 'a' |
+ *  'b' extends 'a' ? never : 'a' |
+ *  'c' extends 'a' ? never : 'a'
  *  => 'b' | 'c'
  *
  * ------
  *
  * MyExclude<'a' | 'b' | 'c', 'a' | 'b'>
- *  MyExclude<'a', 'a'> => 'a' extends 'a' ? never : 'a' => never
- *  MyExclude<'b', 'a'> => 'b' extends 'a' ? never : 'b' => 'b'
- *  MyExclude<'c', 'a'> => 'c' extends 'a' ? never : 'c' => 'c'
- *  => 'b' | 'c'
- *
- *  MyExclude<'b', 'b'> => 'b' extends 'b' ? never : 'b' => never
- *  MyExclude<'c', 'b'> => 'c' extends 'b' ? never : 'c' => 'c'
+ *  'a' extends 'a' | 'b' ? never : 'a' |
+ *  'b' extends 'a' | 'b' ? never : 'a' |
+ *  'c' extends 'a' | 'b' ? never : 'a'
  *  => 'c'
  */
 type MyExclude<T, U> = T extends U ? never : T;
